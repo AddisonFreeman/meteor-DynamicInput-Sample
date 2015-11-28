@@ -20,7 +20,7 @@ etc... */
 fields = new Mongo.Collection("fields");
 
 Schemas.fields = new SimpleSchema({
-	userId: {
+	item_id: {
 		type: String
 	},
 
@@ -55,8 +55,8 @@ if(Meteor.isClient) {
 	});
 	
 	Template.TemplateA.events({
-		"submit .insertValues": function (event, template) {
-			event.preventDefault(); //stops the page from refreshing
+		"submit form": function (event, template) {
+			event.preventDefault(); //don't ajax or post anything that submit might do
 			console.log(event);
 			var domIds = document.getElementsByClassName("item_id");
 			console.log(domIds);
