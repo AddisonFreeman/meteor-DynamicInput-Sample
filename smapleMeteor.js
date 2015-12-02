@@ -1,3 +1,4 @@
+
 //Setup db
 var Schemas = {};
 items = new Mongo.Collection('items');
@@ -11,12 +12,7 @@ Schemas.itemsSchema = new SimpleSchema({
 	}
 });
 items.attachSchema(Schemas.itemsSchema);
-
-/*in browser: items.insert {
-	notes: "a candy wrentch"
-}
-etc... */
-
+	
 fields = new Mongo.Collection("fields");
 
 Schemas.fields = new SimpleSchema({
@@ -38,7 +34,17 @@ Schemas.fields = new SimpleSchema({
 	}
 });
 fields.attachSchema(Schemas.fields);
-
+	
+if (Meteor.isServer) {
+	Meteor.startup(function() {
+		return Meteor.methods({
+		emptyCollections: function() {
+			items.remove({});
+			return fields.remove({});
+		}
+		});
+	});
+}
 if(Meteor.isClient) {
 	Template.TemplateA.helpers({
 		findItems: function() {
@@ -76,4 +82,12 @@ if(Meteor.isClient) {
 			}
 		}
 	});
+	
+	Template.TemplateA.events({
+		"reset form": function (event, template) {
+			event.preventDefault();
+			Meteor.call("emptyCollections");
+		}
+	});
+	
 }
