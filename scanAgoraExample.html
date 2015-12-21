@@ -1,0 +1,29 @@
+
+	<head>
+	<h1>Webpage!</h1>
+	<title>smapleMeteor</title>
+	</head>
+
+	<body>
+	{{> TemplateA }}
+	
+	</body>
+<template name="TemplateA">	
+	<h1>Template A!</h1>
+	<form name="value_form">
+		<button type="submit" class="btn btn-primary submit align-right setValButton" name= "setValButton" id="setValButton">Submit Values</button>						
+		<button type="reset" class="btn btn-primary submit align-right emptyValButton" name= "emptyValButton" id="emptyValButton">Empty Values</button>
+		{{#each findItems}}
+			<input name="item_id" id="item_id" class="item_id" type="hidden" value ="{{_id}}">
+			<h2>FieldA: {{_id}}</h2>
+			<input name="{{_id}}fieldA" id="{{_id}}fieldA" class="setVal">
+			<br>
+			<h2>FieldB: {{_id}}</h2>
+			<input name="{{_id}}fieldB" id="{{_id}}fieldB" class="setVal">
+			<br>
+			<h2>FieldC: {{_id}}</h2>
+			<input name="{{_id}}fieldC" id="{{_id}}fieldC" class="setVal">
+			<br>
+		{{/each}}
+	</form>
+</template>

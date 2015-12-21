@@ -11,16 +11,16 @@
 		<button type="submit" class="btn btn-primary submit align-right setValButton" name= "setValButton" id="setValButton">Submit Values</button>						
 		<button type="reset" class="btn btn-primary submit align-right emptyValButton" name= "emptyValButton" id="emptyValButton">Empty Values</button>
 		{{#each findItems}}
-			{{storeDomId _id}}
-			{{#each fieldNames}}
-				{{storeFieldName fieldName}}
-				{{> TemplateB id=_id field=fieldName}}
-			{{/each}}
+			{{storeId _id}}			
+			{{> TemplateB id=_id}}
 		{{/each}}
 	</form>
 </template>
 
 <template name="TemplateB">
-			<h2>id: {{id}} {{field}}: {{getValue id field}}</h2>
-			<input name="{{id}}{{field}}" id="{{id}}{{field}}" class="setVal">
+	{{#each fieldNames}}
+		{{storeFieldName fieldName}}
+		<h2>id: {{id}} {{fieldName}}: {{getValue id fieldName}}</h2>
+		<input name="{{id}}{{fieldName}}" id="{{id}}{{fieldName}}" class="setVal">
+	{{/each}}
 </template>

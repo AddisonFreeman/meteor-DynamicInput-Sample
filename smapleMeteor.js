@@ -18,7 +18,7 @@ Schemas.fieldsSchema = new SimpleSchema({
 	item_id: {
 		type: String
 	},
-	fields: {
+	fieldVals: {
 		type: [String],
 		optional: true
 	}
@@ -43,9 +43,9 @@ if (Meteor.isServer) {
 				fieldNames.remove({});
 				return fields.remove({});
 			},
-			instaDomIds: function() {
-				var domIds = [];
-				return Session.set("DomIds", domIds);
+			instaIdArray: function() {
+				var idArray = [];
+				return Session.set("idArray", idArray);
 			},
 			instaFieldNames: function() {
 				var fieldNameArr = [];
@@ -75,13 +75,13 @@ if(Meteor.isClient) {
 	});
 
 	//passes item ids into a session variable array, must update records with new instance of array (safe because Session.get returns clone of value)
-	UI.registerHelper('storeDomId', function(item_id, options) {
+	UI.registerHelper('storeId', function(item_id, options) {
 		//(x && ...) checks existence before returning what's after
-		  return Session.get("DomIds") && Session.set("DomIds", Session.get("DomIds").push(item_id));
+		  return Session.get("idArray") && Session.set("idArray", Session.get("idArray").push(item_id));
 		//} 	  
 	});
 	
-	UI.registerHelper('storeFieldName', function(fieldName, options) {
+	UI.registerHelper(' Name', function(fieldName, options) {
 		//(x && ...) checks existence before returning what's after
 		  return Session.get("fieldNameArray") && Session.set("fieldNameArray", Session.get("fieldNameArray").push(fieldName));
 		//} 	  
@@ -106,20 +106,19 @@ if(Meteor.isClient) {
 	//iterate through fields by id from idArray (both stored in Session storage) and copy into database
 	Template.TemplateA.events({
 		"submit form": function (event, template) {
-			event.defaultPrevented; //don't ajax or post anything tha
+			event.defaultPrevented; //don't submit a form
 			//can't it read from db source itself? b/c not "reactive"
-			var domIds = Session.get("domIds");
+			var domIds = Session.get("idArray");
 			for (i = 0; i < domIds.length; i++) {
-				var item_id = domIds[i].value;
+				var item_id = domIds[i];
 				//get (with id) for each fieldName
 				var fieldNameArray = Session.get("fieldNameArray");
-				var fieldsTemp = [];
+				var fieldValArray = [];
 				for (i = 0; j < fieldNameArray.length; j++) {
-					fieldsTemp.add(Session.get(item_id+fieldNameArray[j]));
-						
+					fieldValArray.add(Session.get(item_id+fieldNameArray[j]));
 					fields.insert({
 						item_id: item_id,
-						fieldsTemp: fields
+						fieldVals: fieldValArray
 					});
 				}
 			}
